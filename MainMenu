@@ -1,0 +1,80 @@
+Public Class Main_Menu
+    Public qty, stock, price, total As Integer
+    Private Sub Main_Menu_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
+        'TODO: This line of code loads data into the 'CovDataSet.Item' table. You can move, or remove it, as needed.
+        Me.ItemTableAdapter.Fill(Me.CovDataSet.Item)
+        'TODO: This line of code loads data into the 'CovDataSet.Item' table. You can move, or remove it, as needed.
+        Me.ItemTableAdapter.Fill(Me.CovDataSet.Item)
+        price = Convert.ToInt32(PriceTextBox.Text)
+        stock = Convert.ToInt32(StocksTextBox.Text)
+        Label3.Text = price
+    End Sub
+
+    Private Sub btnadd_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnadd.Click
+        Me.ItemBindingSource.AddNew()
+        BarcodeTextBox.Enabled = True
+        Product_NameTextBox.Enabled = True
+        PriceTextBox.Enabled = True
+        StocksTextBox.Enabled = True
+
+
+
+    End Sub
+
+    Private Sub btncompute_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btncompute.Click
+        qty = Convert.ToInt32(quan.Text)
+        If qty < stock Then
+
+            StocksTextBox.Text = stock - qty
+            total = qty * price
+
+            totaltxt.Text = total
+            MsgBox("Success")
+
+        Else
+            MsgBox("Insuffiecent Stock !")
+
+
+        End If
+    End Sub
+
+    Private Sub btnsave_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnsave.Click
+        Me.Validate()
+        Me.ItemBindingSource.EndEdit()
+        Me.ItemTableAdapter.Update(CovDataSet)
+        TableAdapterManager.UpdateAll(CovDataSet)
+
+
+    End Sub
+
+    Private Sub ItemBindingNavigatorSaveItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
+        Me.Validate()
+        Me.ItemBindingSource.EndEdit()
+        Me.TableAdapterManager.UpdateAll(Me.CovDataSet)
+
+    End Sub
+
+    Private Sub ItemDataGridView_CellContentClick(ByVal sender As System.Object, ByVal e As System.Windows.Forms.DataGridViewCellEventArgs) Handles ItemDataGridView.CellContentClick
+
+    End Sub
+
+    Private Sub btndelete_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btndelete.Click
+        Me.ItemBindingSource.RemoveCurrent()
+
+    End Sub
+
+
+    Private Sub Product_NameTextBox_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Product_NameTextBox.TextChanged
+     
+    End Sub
+
+    Private Sub TextBox1_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TextBox1.TextChanged
+        Try
+            Me.ItemTableAdapter.search(Me.CovDataSet.Item, TextBox1.Text)
+        Catch ex As System.Exception
+            System.Windows.Forms.MessageBox.Show(ex.Message)
+        End Try
+    End Sub
+
+ 
+End Class
